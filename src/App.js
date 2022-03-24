@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
+import { Box } from './Box'
 import { TodoItem } from './TodoItem'
+import { Typography } from './Typography'
 
 function App() {
+    const [failure, setFailure] = useState('')
     const [step, setStep] = useState(-1)
     const [status, setStatus] = useState({})
 
@@ -28,11 +31,19 @@ function App() {
         }
 
         async function createInitialTransaction() {
-            return fetch('http://localhost:5000/setup/transaction', {
-                method: 'POST'
-            })
-                .then(response => response.json())
-                .then(x => setStatus(x))
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const response = await fetch('http://localhost:5000/setup/transaction', {
+                        method: 'POST'
+                    })
+                    const x = await response.json()
+                    setStatus(x)
+                    setFailure('')
+                    return x
+                } catch (error) {
+                    setFailure(`Faucet call failed, retry #${i + 1}`)
+                }
+            }
         }
 
         async function restartBee() {
@@ -65,6 +76,9 @@ function App() {
 
     return (
         <>
+            <Box mb={1}>
+                <Typography>{failure}</Typography>
+            </Box>
             <TodoItem done={step > 0} active={step === 0}>
                 Connecting to Bee Desktop API
             </TodoItem>
