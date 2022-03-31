@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Box } from './Box'
+import { getJson, postJson } from './net'
 import { TodoItem } from './TodoItem'
 import { Typography } from './Typography'
 
@@ -8,24 +9,28 @@ function App() {
     const [step, setStep] = useState(-1)
     const [status, setStatus] = useState({})
 
+    const urlSearchParams = new URLSearchParams(window.location.search)
+    const newApiKey = urlSearchParams.get('v')
+    if (newApiKey) {
+        localStorage.setItem('apiKey', newApiKey)
+        window.location.search = ''
+    }
+
+    const port = parseInt(window.location.host.split(':')[1], 10)
+
     async function wait(x) {
         return new Promise(resolve => setTimeout(() => resolve(x), 500))
     }
 
     useEffect(() => {
         async function connectToDesktopApi() {
-            return fetch('http://localhost:5000/status')
-                .then(response => response.json())
+            return getJson(`http://localhost:${port}/status`)
                 .then(wait)
                 .then(x => setStatus(x))
         }
 
         async function generateAddress() {
-            return fetch('http://localhost:5000/setup/address', {
-                method: 'POST'
-            })
-                .then()
-                .then(response => response.json())
+            return postJson(`http://localhost:${port}/setup/address`)
                 .then(wait)
                 .then(x => setStatus(x))
         }
@@ -33,13 +38,10 @@ function App() {
         async function createInitialTransaction() {
             for (let i = 0; i < 5; i++) {
                 try {
-                    const response = await fetch('http://localhost:5000/setup/transaction', {
-                        method: 'POST'
-                    })
-                    const x = await response.json()
-                    setStatus(x)
+                    const response = await postJson(`http://localhost:${port}/setup/transaction`)
+                    setStatus(response)
                     setFailure('')
-                    return x
+                    return response
                 } catch (error) {
                     setFailure(`Faucet call failed, retry #${i + 1}`)
                 }
@@ -47,9 +49,7 @@ function App() {
         }
 
         async function restartBee() {
-            return fetch('http://localhost:5000/restart', {
-                method: 'POST'
-            }).then(wait)
+            return postJson(`http://localhost:${port}/restart`).then(wait)
         }
 
         if (step === 0) {
@@ -65,10 +65,10 @@ function App() {
             restartBee().then(() => setStep(4))
         }
         if (step === 4) {
-            wait().then(() => window.location.replace('http://localhost:5000/dashboard/#/'))
+            wait().then(() => window.location.replace(`http://localhost:${port}/dashboard/#/`))
             setStep(5)
         }
-    }, [step])
+    }, [step, port])
 
     function onClick() {
         setStep(0)
