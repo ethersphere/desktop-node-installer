@@ -87,7 +87,7 @@ function App() {
             .then(() => wait())
             .then(() => restartBee())
             .then(() => wait())
-            .then(() => window.location.replace(`${getHost()}/dashboard/#/`))
+            .then(() => window.location.replace(`${getHost()}/dashboard/#/restart`))
     }, [loading])
 
     function onClick() {
