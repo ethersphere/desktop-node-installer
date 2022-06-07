@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import InstallIcon from 'remixicon-react/InstallLineIcon'
+import RestartIcon from 'remixicon-react/RestartLineIcon'
 import { Box } from './Box'
 import { Center } from './Center'
 import { Circle } from './Circle'
@@ -10,6 +11,7 @@ import { SwarmLogo } from './SwarmLogo'
 function App() {
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState(null)
+    const [error, setError] = useState(false)
 
     const urlSearchParams = new URLSearchParams(window.location.search)
     const newApiKey = urlSearchParams.get('v')
@@ -70,8 +72,11 @@ function App() {
             for (let i = 0; i < 5; i++) {
                 try {
                     await postJson(`${getHost()}/setup/transaction`)
-                } catch (error) {}
+                } catch (error) {
+                    console.error(error)
+                }
             }
+            throw Error('All attempts failed to create initial transaction')
         }
 
         async function restartBee() {
@@ -88,13 +93,30 @@ function App() {
             .then(() => restartBee())
             .then(() => wait())
             .then(() => window.location.replace(`${getHost()}/dashboard/#/restart`))
+            .catch(error => setError(error))
     }, [loading])
 
     function onClick() {
         setLoading(true)
     }
 
-    const content = loading ? (
+    function onRetry() {
+        window.location.reload()
+    }
+
+    const content = error ? (
+        <Center>
+            <Box mb={1}>
+                <p className="strong">Installation failed!</p>
+            </Box>
+            <Box mb={4}>
+                <p className="light">Sorry… if this happens again you may try to install Swarm manually.</p>
+            </Box>
+            <button onClick={onRetry}>
+                <RestartIcon size={18} color="#dd7200" /> Retry now
+            </button>
+        </Center>
+    ) : loading ? (
         <Center>
             <Box mb={7}>
                 <Circle color="#ededed" size="216px" borderSize="24px" borderColor="#f8f8f8" spinner quarter />
