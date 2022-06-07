@@ -55,7 +55,7 @@ function App() {
         }
 
         async function connectToDesktopApi() {
-            setMessage('Conntecting to Desktop API')
+            setMessage('Connecting to Desktop API...')
             const status = await getStatus()
             if (!status.assetsReady) {
                 await waitForBeeAsset()
@@ -63,7 +63,7 @@ function App() {
         }
 
         async function generateAddress() {
-            setMessage('Generating Bee ethereum address...')
+            setMessage('Generating Bee Ethereum address...')
             return postJson(`${getHost()}/setup/address`)
         }
 
