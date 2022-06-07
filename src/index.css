@@ -1,7 +1,16 @@
+@font-face {
+    font-family: 'iA-Writer';
+    src: url('/public/iAWriterQuattroS-Regular.woff');
+}
+
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
-        'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+body,
+button {
+    font-family: 'iA-Writer', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+        'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -17,7 +26,10 @@ p {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #eee;
+    color: #303030;
+    background: #ededed;
+    font-size: 14px;
+    text-align: center;
 }
 
 .todo-item {
@@ -58,15 +70,60 @@ p {
 }
 
 button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 0;
-    background: #fff;
-    padding: 1rem 2rem;
+    border-radius: 0;
+    outline: none;
+    font-size: 14px;
     color: #303030;
-    font-size: 15px;
-    box-shadow: 0 0 4px #ddd;
+    background: #f9f9f9;
+    width: 160px;
+    height: 42px;
 }
 
-button:disabled {
-    background: #ddd;
-    color: #aaa;
+button > svg {
+    margin-right: 8px;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+.container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 640px;
+}
+
+.container-item {
+    flex: 1;
+}
+
+.center {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    max-width: 100%;
+    width: 172px;
+    margin-top: 64px;
+    margin-bottom: 64px;
+}
+
+.strong {
+    font-size: 16px;
+}
+
+.light {
+    font-style: italic;
+    color: #6c6c6c;
 }
