@@ -72,6 +72,7 @@ function App() {
             for (let i = 0; i < 5; i++) {
                 try {
                     await postJson(`${getHost()}/setup/transaction`)
+                    return
                 } catch (error) {
                     console.error(error)
                 }
