@@ -8,6 +8,8 @@ import { Container } from './Container'
 import { getJson, postJson } from './net'
 import { SwarmLogo } from './SwarmLogo'
 
+const MAX_RETRIES = 100
+
 function App() {
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState(null)
@@ -85,14 +87,28 @@ function App() {
             return postJson(`${getHost()}/restart`)
         }
 
+        async function waitForUltraLightNode() {
+            setMessage('Waiting for ultra light mode...')
+            for (let i = 0; i < MAX_RETRIES; i++) {
+                const { connections } = await getJson(`${getHost()}/peers`)
+                if (connections > 0) {
+                    return
+                }
+                await wait(1000)
+            }
+            throw Error('Could not start in ultra light mode')
+        }
+
         connectToDesktopApi()
-            .then(() => wait())
-            .then(() => generateAddress())
-            .then(() => wait())
-            .then(() => createInitialTransaction())
-            .then(() => wait())
-            .then(() => restartBee())
-            .then(() => wait())
+            .then(wait)
+            .then(generateAddress)
+            .then(wait)
+            .then(createInitialTransaction)
+            .then(wait)
+            .then(restartBee)
+            .then(wait)
+            .then(waitForUltraLightNode)
+            .then(wait)
             .then(() => window.location.replace(`${getHost()}/dashboard/#/restart`))
             .catch(error => setError(error))
     }, [loading])
