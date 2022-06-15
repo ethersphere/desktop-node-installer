@@ -109,7 +109,7 @@ function App() {
             .then(wait)
             .then(waitForUltraLightNode)
             .then(wait)
-            .then(() => window.location.replace(`${getHost()}/dashboard`))
+            .then(() => window.location.replace(`${getHost()}/dashboard/`))
             .catch(error => setError(error))
     }, [loading])
 
