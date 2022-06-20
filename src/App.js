@@ -150,8 +150,8 @@ function App() {
             </Box>
             <Box mb={4}>
                 <p className="light">
-                    Thanks for downloading Swarm Dashboard. Click the button below to install Swarm and set up your
-                    node. This shouldn't take more than 30 seconds.
+                    Thanks for downloading Swarm Desktop. Click the button below to install Swarm and set up your node.
+                    This shouldn't take more than 30 seconds.
                 </p>
             </Box>
             <button onClick={onClick}>
