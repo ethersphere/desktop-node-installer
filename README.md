@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# This repo was merged into [ethersphere/bee-desktop](https://github.com/ethersphere/bee-desktop) repo and archived.
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
